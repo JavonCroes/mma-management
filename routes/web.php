@@ -17,9 +17,10 @@ Route::get("/dashboard", function () {
 // Secured routes only for logged in users
 Route::middleware("auth")->group(function () {
     // MMA Routes
-    Route::get("/fighters", fn() => view("fighters.fighters"))->name(
-        "fighters.index",
-    );
+    Route::get("/fighters", function () {
+        $fighters = \App\Models\Fighter::all();
+        return view("fighters.fighters", compact("fighters"));
+    })->name("fighters.index");
     Route::get("/events", fn() => view("events.events"))->name("events.index");
 
     // Breeze profile routes
@@ -36,10 +37,17 @@ Route::middleware("auth")->group(function () {
 
 Route::middleware(["auth", "admin"])
     ->prefix("admin")
+    ->name("admin.")
     ->group(function () {
         Route::get("/dashboard", function () {
-            return view("admin.dashboard");
-        })->name("admin.dashboard");
+            $fighters = \App\Models\Fighter::all();
+            return view("admin.dashboard", compact("fighters"));
+        })->name("dashboard");
+
+        Route::resource(
+            "fighters",
+            \App\Http\Controllers\Admin\FighterController::class,
+        )->except(["index"]);
     });
 
 require __DIR__ . "/auth.php";
