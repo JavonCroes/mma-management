@@ -32,6 +32,13 @@
                     <x-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
                         Events
                     </x-nav-link>
+                    @auth
+                        @if(auth()->user()->is_admin)
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                                Admin Panel
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
@@ -95,6 +102,13 @@
             <x-responsive-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
                 Events
             </x-responsive-nav-link>
+            @auth
+                @if(auth()->user()->is_admin)
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                        Admin Panel
+                    </x-responsive-nav-link>
+                @endif
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->
